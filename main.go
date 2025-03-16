@@ -30,7 +30,7 @@ func main() {
 	for depth := 0; depth < maxDepth; depth++ {
 		fmt.Printf("%v - %v total friends\n", depth, len(currentNodes))
 
-		if nodeFound := findNode(currentNodes, targetId); nodeFound != nil {
+		if nodeFound := graph.FindNode(currentNodes, targetId); nodeFound != nil {
 			displayResult(nodeFound)
 			return
 		}
@@ -85,14 +85,4 @@ func displayResult(endNode *graph.Node) {
 
 		currentNode = currentNode.Root
 	}
-}
-
-func findNode(nodes []*graph.Node, data string) *graph.Node {
-	for _, node := range nodes {
-		if node.Data == data {
-			return node
-		}
-	}
-
-	return nil
 }

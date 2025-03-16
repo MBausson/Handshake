@@ -10,7 +10,7 @@ The project is based on Steam friends, but can easily be adapted to another soci
 ## Usage
 
 In order to use this program, you need :
-- A Steam API key, [retrievable here](https://)
+- A Steam API key, [retrievable here](https://steamcommunity.com/dev/apikey)
 - A starting point which is represented by a user's Steam ID
 - A user to reach, based on his Steam ID
 

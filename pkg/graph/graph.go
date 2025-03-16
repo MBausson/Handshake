@@ -5,3 +5,13 @@ type Node struct {
 	Root *Node
 	Next []*Node
 }
+
+func FindNode(nodes []*Node, data string) *Node {
+	for _, node := range nodes {
+		if node.Data == data {
+			return node
+		}
+	}
+
+	return nil
+}
