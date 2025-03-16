@@ -8,11 +8,13 @@ import (
 	"sync"
 )
 
+var cache = map[string]*graph.Node{}
+
 func main() {
 	var startId, targetId string
 	var maxDepth int
 
-	flag.StringVar(&api.ApiKey, "key", "", "Your steam API key")
+	flag.StringVar(&api.Key, "key", "", "Your steam API key")
 	flag.StringVar(&startId, "from", "", "The steam user's ID from which the handshakes start")
 	flag.StringVar(&targetId, "to", "", "The steam user's ID to find")
 	flag.IntVar(&maxDepth, "depth", 6, "The maximum depth of relations until the algorithm stops")
@@ -51,6 +53,11 @@ func fetchFriends(nodes []*graph.Node) []*graph.Node {
 		go func(steamId string) {
 			defer wg.Done()
 
+			if cachedNode, ok := cache[steamId]; ok {
+				result = append(result, cachedNode)
+				return
+			}
+
 			var friends, err = api.GetFriends(node.Data)
 
 			if err != nil {
@@ -59,10 +66,14 @@ func fetchFriends(nodes []*graph.Node) []*graph.Node {
 			}
 
 			for _, friend := range friends {
-				result = append(result, &graph.Node{
+				newNode := &graph.Node{
 					Data: friend.SteamId,
 					Root: node,
-				})
+				}
+
+				cache[steamId] = newNode
+
+				result = append(result, newNode)
 			}
 		}(node.Data)
 	}

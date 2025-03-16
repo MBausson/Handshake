@@ -7,10 +7,11 @@ import (
 	"net/http"
 )
 
-var ApiKey = "Set via CLI flags"
+var Key = "Set via CLI flags"
+var baseUrl = "https://api.steampowered.com/ISteamUser"
 
 func GetFriends(steamId string) ([]SteamFriend, error) {
-	url := fmt.Sprintf("https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=%s&steamid=%s&relationship=friend", ApiKey, steamId)
+	url := baseUrl + fmt.Sprintf("/GetFriendList/v1/?key=%s&steamid=%s&relationship=friend", Key, steamId)
 
 	resp, err := http.Get(url)
 
@@ -37,7 +38,7 @@ func GetFriends(steamId string) ([]SteamFriend, error) {
 }
 
 func GetUser(steamId string) (SteamUser, error) {
-	url := fmt.Sprintf("https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=%s&steamids=%s", ApiKey, steamId)
+	url := baseUrl + fmt.Sprintf("/GetPlayerSummaries/v0002/?key=%s&steamids=%s", Key, steamId)
 
 	resp, err := http.Get(url)
 
