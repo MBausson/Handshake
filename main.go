@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-var cache = map[string]*graph.Node{}
+var cache sync.Map
 
 func main() {
 	var startId, targetId string
@@ -53,8 +53,8 @@ func fetchFriends(nodes []*graph.Node) []*graph.Node {
 		go func(steamId string) {
 			defer wg.Done()
 
-			if cachedNode, ok := cache[steamId]; ok {
-				result = append(result, cachedNode)
+			if cachedNode, ok := cache.Load(steamId); ok {
+				result = append(result, cachedNode.(*graph.Node))
 				return
 			}
 
@@ -71,7 +71,7 @@ func fetchFriends(nodes []*graph.Node) []*graph.Node {
 					Root: node,
 				}
 
-				cache[steamId] = newNode
+				cache.Store(steamId, newNode)
 
 				result = append(result, newNode)
 			}
