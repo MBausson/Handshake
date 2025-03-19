@@ -15,7 +15,7 @@ func GetFriends(steamId string) ([]SteamFriend, error) {
 
 	resp, err := http.Get(url)
 
-	if err != nil {
+	if err != nil || resp.StatusCode != http.StatusOK {
 		return []SteamFriend{}, err
 	}
 
