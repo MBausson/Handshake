@@ -30,10 +30,10 @@ func main() {
 	currentNodes := []*graph.Node{root}
 
 	for depth := 0; depth < maxDepth; depth++ {
-		fmt.Printf("%v - %v total friends\n", depth, len(currentNodes))
+		fmt.Printf("%v - %v total friends\n", depth+1, len(currentNodes))
 
 		if nodeFound := graph.FindNode(currentNodes, targetId); nodeFound != nil {
-			displayResult(nodeFound)
+			displayResult(startId, nodeFound)
 			return
 		}
 
@@ -82,18 +82,24 @@ func fetchFriends(nodes []*graph.Node) []*graph.Node {
 	return result
 }
 
-func displayResult(endNode *graph.Node) {
-	currentNode := endNode
-
-	for currentNode.Root != nil {
-		user, err := api.GetUser(currentNode.Data)
+func displayResult(startingId string, endNode *graph.Node) {
+	displayUser := func(steamId string) {
+		user, err := api.GetUser(steamId)
 
 		if err != nil {
 			panic(err)
 		}
 
 		fmt.Printf("--> User '%s' %s\n", user.Name, user.Url)
+	}
+
+	currentNode := endNode
+
+	for currentNode.Root != nil {
+		displayUser(currentNode.Data)
 
 		currentNode = currentNode.Root
 	}
+
+	displayUser(startingId)
 }
